@@ -1,40 +1,27 @@
-install.packages("plotly")
-# Load the necessary libraries
-library(ggplot2)
-library(plotly)
+# Load the Leaflet Package
+library(leaflet)
 
-# Load the built-in Iris dataset
-data("iris")
+# Define geographic coordinates
+katpadi_lat <- 12.9815
+katpadi_lng <- 79.1415
+landmark_lat <- 12.9692
+landmark_lng <- 79.1559
 
-# 1. Static Visualization using ggplot2 (Explicit Syntax)
-static_plot <- ggplot(data = iris) +
-  geom_point(mapping = aes(x = Sepal.Width, y = Petal.Width, color = Species), 
-             size = 3, 
-             alpha = 0.8) +
-  labs(title = "Static Plot: Sepal Width vs Petal Width",
-       x = "Sepal Width",
-       y = "Petal Width")
-
-print(static_plot)
-
-# 2. Converting Static Plot to Interactive Plot
-interactive_converted <- ggplotly(p = static_plot)
-print(interactive_converted)
-
-# 3. Interactive Visualization natively using Plotly
-native_plotly <- plot_ly(
-  data = iris, 
-  x = ~Sepal.Width, 
-  y = ~Petal.Width, 
-  color = ~Species, 
-  type = "scatter", 
-  mode = "markers",
-  marker = list(size = 10, opacity = 0.8)
-) %>%
-  layout(
-    title = "Iris Data Set Visualization",
-    xaxis = list(title = "Sepal Width", ticksuffix = "cm"),
-    yaxis = list(title = "Petal Width", ticksuffix = "cm")
+# Initialize Map, Set View, and Add Markers explicitly
+final_map <- leaflet() %>%
+  addTiles() %>%
+  setView(lng = katpadi_lng, lat = katpadi_lat, zoom = 14) %>%
+  addMarkers(lng = katpadi_lng, lat = katpadi_lat, 
+             popup = "Katpadi Railway Station Junction") %>%
+  addCircleMarkers(
+    lng = landmark_lng, 
+    lat = landmark_lat,
+    radius = 10,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.8,
+    label = "Major Educational Institute Cluster"
   )
 
-print(native_plotly)
+# Display the final map
+print(final_map)
